@@ -4,17 +4,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _regenerator = require('babel-runtime/regenerator');
+var _extends2 = require('babel-runtime/helpers/extends');
 
-var _regenerator2 = _interopRequireDefault(_regenerator);
-
-var _typeof2 = require('babel-runtime/helpers/typeof');
-
-var _typeof3 = _interopRequireDefault(_typeof2);
-
-var _asyncToGenerator2 = require('babel-runtime/helpers/asyncToGenerator');
-
-var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
+var _extends3 = _interopRequireDefault(_extends2);
 
 var _classCallCheck2 = require('babel-runtime/helpers/classCallCheck');
 
@@ -24,81 +16,81 @@ var _createClass2 = require('babel-runtime/helpers/createClass');
 
 var _createClass3 = _interopRequireDefault(_createClass2);
 
-var _awaiting = require('awaiting');
+var _regenerator = require('babel-runtime/regenerator');
 
-var a = _interopRequireWildcard(_awaiting);
+var _regenerator2 = _interopRequireDefault(_regenerator);
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+var _stringify = require('babel-runtime/core-js/json/stringify');
+
+var _stringify2 = _interopRequireDefault(_stringify);
+
+var _asyncToGenerator2 = require('babel-runtime/helpers/asyncToGenerator');
+
+var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
+
+require('isomorphic-fetch');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var DijixAttestation = function () {
-  function DijixAttestation() {
-    (0, _classCallCheck3.default)(this, DijixAttestation);
+var defaultConfig = {
+  endpoint: 'http://localhost:3000',
+  log: false,
+  getPostData: function getPostData(ipfsHash) {
+    return { ipfsHash: ipfsHash };
+  },
+  dispatchPostData: function dispatchPostData(data, config) {
+    var _this = this;
 
-    this.type = 'attestation';
+    return (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee() {
+      return _regenerator2.default.wrap(function _callee$(_context) {
+        while (1) {
+          switch (_context.prev = _context.next) {
+            case 0:
+              return _context.abrupt('return', fetch(config.endpoint, {
+                method: 'POST',
+                body: (0, _stringify2.default)(data),
+                headers: { 'Content-Type': 'application/json' }
+              }));
+
+            case 1:
+            case 'end':
+              return _context.stop();
+          }
+        }
+      }, _callee, _this);
+    }))();
+  }
+}; /* global fetch */
+/* eslint-disable no-console */
+
+var DijixIpfsPinningPlugin = function () {
+  function DijixIpfsPinningPlugin(config) {
+    (0, _classCallCheck3.default)(this, DijixIpfsPinningPlugin);
+
+    this.config = (0, _extends3.default)({}, defaultConfig, config);
   }
 
-  (0, _createClass3.default)(DijixAttestation, [{
-    key: 'processProofs',
+  (0, _createClass3.default)(DijixIpfsPinningPlugin, [{
+    key: 'ipfsHashAdded',
     value: function () {
-      var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee2(proofs, dijix) {
-        var _this = this;
-
+      var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee2(payload) {
+        var postData;
         return _regenerator2.default.wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
-                if (proofs) {
-                  _context2.next = 2;
-                  break;
-                }
-
-                return _context2.abrupt('return', []);
+                _context2.next = 2;
+                return this.config.getPostData(payload, this.config);
 
               case 2:
-                return _context2.abrupt('return', a.map(proofs, 1, function () {
-                  var _ref2 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(proof) {
-                    return _regenerator2.default.wrap(function _callee$(_context) {
-                      while (1) {
-                        switch (_context.prev = _context.next) {
-                          case 0:
-                            if (!((typeof proof === 'undefined' ? 'undefined' : (0, _typeof3.default)(proof)) !== 'object')) {
-                              _context.next = 2;
-                              break;
-                            }
+                postData = _context2.sent;
 
-                            return _context.abrupt('return', proof);
+                if (this.log) {
+                  console.log('pinning', payload);
+                }
+                return _context2.abrupt('return', this.config.dispatchPostData(postData, this.config));
 
-                          case 2:
-                            if (proof.type) {
-                              _context.next = 4;
-                              break;
-                            }
-
-                            return _context.abrupt('return', proof);
-
-                          case 4:
-                            _context.next = 6;
-                            return dijix.create(proof.type, proof);
-
-                          case 6:
-                            return _context.abrupt('return', _context.sent.ipfsHash);
-
-                          case 7:
-                          case 'end':
-                            return _context.stop();
-                        }
-                      }
-                    }, _callee, _this);
-                  }));
-
-                  return function (_x3) {
-                    return _ref2.apply(this, arguments);
-                  };
-                }()));
-
-              case 3:
+              case 5:
               case 'end':
                 return _context2.stop();
             }
@@ -106,58 +98,14 @@ var DijixAttestation = function () {
         }, _callee2, this);
       }));
 
-      function processProofs(_x, _x2) {
+      function ipfsHashAdded(_x) {
         return _ref.apply(this, arguments);
       }
 
-      return processProofs;
-    }()
-  }, {
-    key: 'creationPipeline',
-    value: function () {
-      var _ref3 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee3(opts, dijix) {
-        var dijixObjectData, version;
-        return _regenerator2.default.wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                _context3.next = 2;
-                return this.processProofs(opts.proofs, dijix);
-
-              case 2:
-                _context3.t0 = _context3.sent;
-                dijixObjectData = {
-                  proofs: _context3.t0
-                };
-                version = opts.version || opts.type && '0.0.1';
-
-                if (version) {
-                  dijixObjectData.version = version;
-                }
-                if (opts.type) {
-                  dijixObjectData.type = opts.type;
-                }
-                if (opts.attestation) {
-                  dijixObjectData.attestation = opts.attestation;
-                }
-                return _context3.abrupt('return', dijixObjectData);
-
-              case 9:
-              case 'end':
-                return _context3.stop();
-            }
-          }
-        }, _callee3, this);
-      }));
-
-      function creationPipeline(_x4, _x5) {
-        return _ref3.apply(this, arguments);
-      }
-
-      return creationPipeline;
+      return ipfsHashAdded;
     }()
   }]);
-  return DijixAttestation;
+  return DijixIpfsPinningPlugin;
 }();
 
-exports.default = DijixAttestation;
+exports.default = DijixIpfsPinningPlugin;
