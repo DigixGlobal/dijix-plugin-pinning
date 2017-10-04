@@ -4,13 +4,20 @@
 
 This plugin lets you pass some data to a HTTP endpoint (such as for pinning)
 
+Also has `signMessage` option for auth (see https://github.com/DigixGlobal/node-ipfs-pinning-server-lite)
+
 ```javascript
 const dijix = new Dijix({
   plugins: [
     new DijixIpfsPinningPlugin({
       log: false, // enable to console log IPFS hashes as they are pinned
       endpoint: 'http://somewhere', // optional, defaults to http://localhost:3000
-      getPostData: (ipfsHash, config) => {
+      signMessage: {
+        // optional, adds additional `timestamp`, `signature` and `signer` to data
+        keystore: '/path/to/v3_keystore.json',
+        password: 'password',
+       },
+      getPostData: ({ ipfsHash, ...postData }, config) => {
         // optional, return a promise, resolving to serialized object containing data that is posted to the endpoint
       },
       dispatchPostData: ({ ipfsHash }, config) => {
