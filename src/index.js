@@ -9,7 +9,7 @@ import Wallet from 'ethereumjs-wallet';
 const defaultConfig = {
   endpoint: 'http://localhost:3000',
   log: false,
-  getPostData(ipfsHash, { signMessage, privateKey, signer }) {
+  getPostData(ipfsHash, { signMessage, privateKey, signer } = {}) {
     if (!signMessage) { return { ipfsHash }; }
     const timestamp = new Date().getTime();
     const message = util.hashPersonalMessage(util.sha3(`${ipfsHash}${timestamp}`));

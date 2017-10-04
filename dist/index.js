@@ -54,8 +54,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var defaultConfig = {
   endpoint: 'http://localhost:3000',
   log: false,
-  getPostData: function getPostData(ipfsHash, _ref) {
-    var signMessage = _ref.signMessage,
+  getPostData: function getPostData(ipfsHash) {
+    var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+        signMessage = _ref.signMessage,
         privateKey = _ref.privateKey,
         signer = _ref.signer;
 
@@ -142,7 +143,7 @@ var DijixIpfsPinningPlugin = function () {
         }, _callee2, this);
       }));
 
-      function ipfsHashAdded(_x) {
+      function ipfsHashAdded(_x2) {
         return _ref2.apply(this, arguments);
       }
 

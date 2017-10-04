@@ -1,6 +1,6 @@
 {
   "name": "dijix-plugin-pinning",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Plugin to hook into ipfs uploads (for pinning?)",
   "main": "dist/index.js",
   "files": [
